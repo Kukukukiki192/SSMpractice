@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--开启注解扫描-->
+    <context:component-scan base-package="com"></context:component-scan>
+
+    <!--视图解析器对象-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--前端控制器，哪些静态资源不拦截-->
+    <mvc:resources location="/css/" mapping="/css/**"/>
+    <mvc:resources location="/images/" mapping="/images/**"/>
+    <mvc:resources location="/js/" mapping="/js/**"/>
+
+    <!--配置文件解析器对象象,要求id名称必须是multipartResolver-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--设置上传文件的最大尺寸为 10MB-->
+        <property name="maxUploadSize" value="10485760"></property>
+        <!-- 配置编码格式 -->
+<!--        <property name="DefaultEncoding" value="UTF-8"></property>-->
+    </bean>
+    <!--注意：文件上传的解析器 id 是固定的,不能起别的名称,
+    否则无法实现请求参数的绑定(不光是文件，其他字段也将无法绑定)-->
+
+    <!--开启springMVC框架注解的支持-->
+    <mvc:annotation-driven/>
+
+</beans>

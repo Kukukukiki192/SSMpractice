@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--sql映射文件-->
+<mapper namespace="com.dao.IRoleDao"><!--namespace写的是dao的全限定类名-->
+
+    <!--定义Role表的resultMap-->
+    <resultMap id="roleMap" type="role">
+        <id property="roleId" column="rid"></id>
+        <result property="roleName" column="role_name"></result>
+        <result property="roleDesc" column="role_desc"></result>
+        <!--配置用户集合的映射-->
+        <collection property="users" ofType="user">
+            <id property="id" column="id"></id>
+            <result property="username" column="username"></result>
+            <result property="birthday" column="birthday"></result>
+            <result property="sex" column="sex"></result>
+            <result property="address" column="address"></result>
+        </collection>
+    </resultMap>
+
+    <!--查询所有角色及其用户信息-->
+    <select id="findAll" resultMap="roleMap">
+        select r.ID as rid,r.ROLE_DESC,r.ROLE_NAME,u.* from role r
+            LEFT OUTER JOIN user_role ur ON r.ID=ur.RID
+            LEFT OUTER JOIN user u ON ur.UID=u.id
+    </select>
+
+</mapper>

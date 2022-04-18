@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--sql映射文件-->
+<mapper namespace="com.dao.IUserDao"><!--namespace写的是dao的全限定类名-->
+
+    <!--配置 查询结果列名_实体类属性名对应关系-->
+<!--    <resultMap id="userMap" type="com.domain.User">-->
+<!--        &lt;!&ndash;主键字段的对应&ndash;&gt;-->
+<!--        <id property="userId" column="id"></id>-->
+<!--        &lt;!&ndash;非主键字段的对应&ndash;&gt;-->
+<!--        <result property="userName" column="username"></result>-->
+<!--        <result property="userAddress" column="address"></result>-->
+<!--        <result property="userSex" column="sex"></result>-->
+<!--        <result property="userBirthday" column="birthday"></result>-->
+<!--    </resultMap>-->
+
+    <!--查询所有-->         <!--resultMap="userMap"-->
+    <select id="findAll" resultType="User">
+        select * from user
+    </select>
+
+    <!--根据id查询用户-->
+    <select id="findById" parameterType="Integer" resultType="User">
+        select * from user where id=#{id}
+    </select>
+
+    <!--根据名称模糊查询用户-->
+    <select id="findByName" parameterType="String" resultType="User">
+        select * from user where username like #{username}
+    </select>
+
+    <!--根据QueryVo中的条件查询用户-->
+    <select id="findByVo" parameterType="QueryVo" resultType="User">
+        select * from user where username like #{user.username}<!--QueryVo中的user的username-->
+    </select>
+
+    <!--保存用户-->
+    <insert id="saveUser" parameterType="User">
+        <!--配置插入操作后,获取插入数据的id  keyProperty_id的属性名称_对应实体类 keyColumn_id列名_对应表 resultType_结果集类型  order_什么时候执行获取id操作 -->
+        <selectKey keyProperty="id" keyColumn="id" resultType="int" order="AFTER"><!--在保存后获取id-->
+            select last_insert_id()
+        </selectKey>
+        insert into user(username,address,sex,birthday) values (#{username},#{address},#{sex},#{birthday})
+    </insert>
+
+    <!--更新用户-->
+    <update id="updateUser" parameterType="User">
+        update user set username=#{username},address=#{address},sex=#{sex},birthday=#{birthday} where id=#{id}
+    </update>
+
+    <!--根据id删除用户-->
+    <delete id="deleteUser" parameterType="Integer">
+        delete from user where id=#{id}
+    </delete>
+
+    <!--获取用户总记录条数-->
+    <select id="findTotal" resultType="int">
+        select count(id) from user
+    </select>
+
+
+</mapper>
